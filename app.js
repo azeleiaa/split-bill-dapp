@@ -7,7 +7,7 @@
 
 // 1. ALAMAT DAN ABI SMART CONTRACT
 // Catatan: Setelah men-deploy kontrak pintar Anda, masukkan alamat kontrak di sini.
-const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // Alamat default local Hardhat/Anvil
+const CONTRACT_ADDRESS = "DEPLOY_TO_SEPOLIA_FIRST"; // TODO: Replace with address after running: npx hardhat run scripts/deploy.js --network sepolia
 
 const CONTRACT_ABI = [
     {

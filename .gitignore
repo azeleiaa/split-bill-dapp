@@ -4,8 +4,9 @@ hardhat-deploy/artifacts/
 hardhat-deploy/cache/
 hardhat-deploy/typechain-types/
 
-# Environment files
+# Environment files — NEVER commit these
 .env
+hardhat-deploy/.env
 .env.local
 
 # OS files
