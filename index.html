@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SplitBill Dinamis — dApp</title>
+    
+    <!-- Meta Tags SEO -->
+    <meta name="description" content="Aplikasi dApp Split Bill Dinamis menggunakan Smart Contract Solidity dan Ethers.js v6 terintegrasi penuh dengan MetaMask.">
+    <meta name="author" content="Antigravity Dev">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Premium Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Animated Aurora Background -->
+    <div class="aurora-container" aria-hidden="true">
+        <div class="aurora aurora-1"></div>
+        <div class="aurora aurora-2"></div>
+        <div class="aurora aurora-3"></div>
+    </div>
+
+    <!-- Floating Particle Dots -->
+    <div class="particles" aria-hidden="true">
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+    </div>
+
+    <div class="app-container">
+        
+        <!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon-wrap">
+                    <svg class="logo-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 3L33 30H3L18 3Z" fill="url(#lg1)" opacity="0.9"/>
+                        <circle cx="18" cy="20" r="7" fill="url(#lg2)"/>
+                        <defs>
+                            <linearGradient id="lg1" x1="3" y1="3" x2="33" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#a78bfa"/>
+                                <stop offset="1" stop-color="#ec4899"/>
+                            </linearGradient>
+                            <linearGradient id="lg2" x1="11" y1="13" x2="25" y2="27" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#06b6d4"/>
+                                <stop offset="1" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>Split<span>Bill</span></h1>
+                    <span class="logo-tagline">On-chain • Trustless • Instant</span>
+                </div>
+            </div>
+            
+            <nav class="header-nav">
+                <div id="networkPill" class="network-pill hidden">
+                    <span class="network-dot"></span>
+                    <span id="networkName">Localhost</span>
+                </div>
+                <button id="btnConnect" class="btn btn-connect">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    Connect Wallet
+                </button>
+                <div id="walletInfo" class="wallet-chip hidden">
+                    <span class="chip-dot"></span>
+                    <span id="accountAddress" class="chip-address">0x0...000</span>
+                    <span class="chip-copy" id="btnCopyAddr" title="Salin Alamat">⧉</span>
+                </div>
+            </nav>
+        </header>
+
+        <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+        <main class="app-main">
+            
+            <!-- ─── DISCONNECTED STATE ─── -->
+            <div id="disconnectedState" class="hero-state">
+                <div class="hero-badge">
+                    <span>✦</span> Web3 Native
+                </div>
+                <div class="hero-icon">
+                    <div class="hero-icon-ring"></div>
+                    <div class="hero-icon-ring hero-icon-ring-2"></div>
+                    <span class="hero-icon-emoji">🔐</span>
+                </div>
+                <h2 class="hero-title">Bayar Tagihan Bersama,<br><span>Tanpa Perantara</span></h2>
+                <p class="hero-subtitle">Hubungkan dompet MetaMask untuk mulai membuat dan membayar tagihan secara langsung di blockchain — transparan, aman, dan instan.</p>
+                <div class="hero-actions">
+                    <button id="btnConnectBody" class="btn btn-hero">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Hubungkan MetaMask
+                    </button>
+                    <a href="https://metamask.io" target="_blank" rel="noopener" class="btn btn-ghost">Dapatkan MetaMask →</a>
+                </div>
+                <div class="hero-features">
+                    <div class="feature-chip"><span>⚡</span> On-chain</div>
+                    <div class="feature-chip"><span>🔒</span> Trustless</div>
+                    <div class="feature-chip"><span>🌐</span> Permissionless</div>
+                    <div class="feature-chip"><span>💸</span> Split Otomatis</div>
+                </div>
+            </div>
+
+            <!-- ─── CONNECTED STATE ─── -->
+            <div id="connectedState" class="connected-layout hidden">
+
+                <!-- Stats Bar -->
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-label">Tagihan Masuk</span>
+                        <strong id="statInbound" class="stat-value">—</strong>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-label">Tagihan Keluar</span>
+                        <strong id="statOutbound" class="stat-value">—</strong>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-label">Belum Lunas</span>
+                        <strong id="statPending" class="stat-value text-warning">—</strong>
+                    </div>
+                    <div class="stats-refresh">
+                        <button id="btnRefresh" class="btn-icon" title="Refresh Data">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid-layout">
+
+                    <!-- ═══ COLUMN 1: CREATE BILL PANEL ═══ -->
+                    <section class="panel panel-creator" id="createBillPanel">
+                        <div class="panel-glow panel-glow-violet"></div>
+                        <div class="panel-header">
+                            <div class="panel-title-row">
+                                <div class="panel-icon-badge violet">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                </div>
+                                <div>
+                                    <h2>Buat Tagihan Baru</h2>
+                                    <p class="panel-subtitle">Bagi tagihan secara rata & otomatis</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form id="formCreateBill" onsubmit="return false;" autocomplete="off">
+                            
+                            <!-- Deskripsi -->
+                            <div class="form-group">
+                                <label for="billDescription">Deskripsi Tagihan</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="12" x2="3" y2="12"/><line x1="21" y1="18" x2="9" y2="18"/></svg>
+                                    </span>
+                                    <input type="text" id="billDescription" placeholder="Misal: Makan Siang Bersama" required maxlength="100">
+                                </div>
+                            </div>
+
+                            <!-- Total ETH -->
+                            <div class="form-group">
+                                <label for="billTotalAmount">Total Tagihan (ETH)</label>
+                                <div class="input-wrapper">
+                                    <span class="input-icon eth-icon">Ξ</span>
+                                    <input type="number" id="billTotalAmount" step="0.0001" min="0.0001" placeholder="0.05" required>
+                                </div>
+                            </div>
+
+                            <!-- Daftar Debtors -->
+                            <div class="form-group">
+                                <div class="label-row">
+                                    <label>Daftar Wallet Teman</label>
+                                    <button type="button" id="btnAddDebtor" class="btn-add-row">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                        Tambah Teman
+                                    </button>
+                                </div>
+                                <p class="input-hint">💡 Tagihan dibagi rata: Total ÷ (Jumlah Teman + Anda)</p>
+                                
+                                <div id="debtorsContainer" class="debtors-container">
+                                    <!-- Default row -->
+                                    <div class="debtor-row">
+                                        <span class="row-number">1</span>
+                                        <input type="text" class="debtor-input" placeholder="0x..." required>
+                                        <button type="button" class="btn-remove-row" title="Hapus" disabled>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Split Preview -->
+                            <div class="split-preview-box">
+                                <div class="preview-label">
+                                    <span>⚖️</span> Estimasi per Orang
+                                </div>
+                                <div id="valPerPerson" class="preview-value">0.00 ETH</div>
+                            </div>
+
+                            <button type="submit" id="btnSubmitBill" class="btn btn-submit">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                Kirim Tagihan ke Blockchain
+                            </button>
+                        </form>
+                    </section>
+
+                    <!-- ═══ COLUMN 2: DASHBOARD ═══ -->
+                    <div class="dashboard-columns">
+
+                        <!-- PANEL TAGIHAN MASUK -->
+                        <section class="panel panel-inbound">
+                            <div class="panel-glow panel-glow-cyan"></div>
+                            <div class="panel-header">
+                                <div class="panel-title-row">
+                                    <div class="panel-icon-badge cyan">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                                    </div>
+                                    <div>
+                                        <h2>Tagihan Saya</h2>
+                                        <p class="panel-subtitle">Tagihan yang harus Anda bayar</p>
+                                    </div>
+                                </div>
+                                <span class="panel-badge inbound-badge">Masuk</span>
+                            </div>
+                            <div id="inboundContainer" class="bills-list">
+                                <div class="empty-state">
+                                    <div class="empty-icon-wrap">📂</div>
+                                    <p>Tidak ada tagihan masuk untuk akun ini.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- PANEL TAGIHAN KELUAR -->
+                        <section class="panel panel-outbound">
+                            <div class="panel-glow panel-glow-pink"></div>
+                            <div class="panel-header">
+                                <div class="panel-title-row">
+                                    <div class="panel-icon-badge pink">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                                    </div>
+                                    <div>
+                                        <h2>Tagihan Dibuat</h2>
+                                        <p class="panel-subtitle">Pantau pembayaran tagihan yang Anda kirim</p>
+                                    </div>
+                                </div>
+                                <span class="panel-badge outbound-badge">Keluar</span>
+                            </div>
+                            <div id="outboundContainer" class="bills-list">
+                                <div class="empty-state">
+                                    <div class="empty-icon-wrap">📊</div>
+                                    <p>Anda belum membuat tagihan apapun.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div><!-- end dashboard-columns -->
+
+                </div><!-- end grid-layout -->
+
+            </div><!-- end connectedState -->
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="app-footer">
+            <div class="footer-inner">
+                <span class="footer-logo">SplitBill Dinamis</span>
+                <span class="footer-sep">·</span>
+                <span>Smart Contract + Ethers.js v6</span>
+                <span class="footer-sep">·</span>
+                <span>© 2026</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification System -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Ethers.js v6 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.0/ethers.umd.min.js"></script>
+    <!-- App Logic -->
+    <script src="app.js"></script>
+</body>
+</html>

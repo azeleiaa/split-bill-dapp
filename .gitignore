@@ -1,0 +1,13 @@
+# Hardhat deploy dependencies
+hardhat-deploy/node_modules/
+hardhat-deploy/artifacts/
+hardhat-deploy/cache/
+hardhat-deploy/typechain-types/
+
+# Environment files
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
